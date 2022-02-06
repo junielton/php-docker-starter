@@ -1,0 +1,60 @@
+version: "3"
+
+networks:
+  vst:
+
+services:
+  web-vst:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: "web-server-vst"
+    ports:
+      - "8000:80"
+      - "3000:3000"
+      - "3001:3001"
+    networks:
+      - vst
+    volumes:
+      - ./www:/var/www/html/
+
+  mysql-vst:
+    image: mysql
+    command: --vst-authentication-plugin=mysql_native_password
+    container_name: "mysql-database-vst"
+    tty: true
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/mysql
+    networks:
+      - vst
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: homestead
+      MYSQL_DATABASE: homestead
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_PASSWORD: site
+      MYSQL_ROOT_HOST: localhost
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - 3306:3306
+
+  redis-vst:
+    image: redis:alpine
+    container_name: "redis-vst"
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - vst
+
+  mailhog-vst:
+    image: mailhog/mailhog:latest
+    container_name: "mailhog-vst"
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - vst
