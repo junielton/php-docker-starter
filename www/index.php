@@ -12,7 +12,7 @@
 <body>
 	<main class="bg-orange-300">
 		<h1>
-			<?php echo "Lorem ipsum prica" ?>
+			<?php echo "Lorem ipsum" ?>
 		</h1>
 	</main>
 </body>

@@ -9,6 +9,9 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    environment:
+      ALLOW_OVERRIDE: 'true'
+      DEBUG: 'true'
     container_name: "web-server-vst"
     ports:
       - "8000:80"
@@ -21,7 +24,7 @@ services:
 
   mysql-vst:
     image: mysql
-    command: --vst-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password
     container_name: "mysql-database-vst"
     tty: true
     volumes:
@@ -34,7 +37,7 @@ services:
       MYSQL_USER: homestead
       MYSQL_DATABASE: homestead
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_PASSWORD: site
+      MYSQL_PASSWORD: secret
       MYSQL_ROOT_HOST: localhost
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
